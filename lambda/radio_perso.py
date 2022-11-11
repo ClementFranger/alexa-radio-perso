@@ -4,8 +4,9 @@ from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 import ask_sdk_core.utils as ask_utils
-from ask_sdk_core.handler_input import HandlerInput
-
+from ask_sdk_model.interfaces.audioplayer import (
+    PlayDirective, PlayBehavior, AudioItem, Stream, AudioItemMetadata,
+    StopDirective, ClearQueueDirective, ClearBehavior)
 from ask_sdk_model import Response
 
 logger = logging.getLogger(__name__)
@@ -15,7 +16,7 @@ logger.setLevel(logging.INFO)
 class LaunchRequestHandler(AbstractRequestHandler):
     """Handler for Skill Launch."""
     def can_handle(self, handler_input):
-        
+
         return ask_utils.is_request_type("LaunchRequest")(handler_input)
 
     def handle(self, handler_input):
@@ -23,9 +24,9 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
         return (
             handler_input.response_builder
-                .speak(speak_output)
-                .ask(speak_output)
-                .response
+            .speak(speak_output)
+            .ask(speak_output)
+            .response
         )
 
 
@@ -35,15 +36,17 @@ class GetMusicIntentHandler(AbstractRequestHandler):
         return ask_utils.is_intent_name("GetMusicIntent")(handler_input)
 
     def handle(self, handler_input):
-        music = handler_input.request_envelope.request.intent.slots.get('music')
-        logger.info(f'Got {music} music')
-        speak_output = "Hello Python World from Classes!"
+        music = handler_input.request_envelope.request.intent.slots.get('music').value
+        logger.info(f'Got {music} music request')
+        speak_output = f"Voici {music}"
 
         return (
             handler_input.response_builder
-                .speak(speak_output)
-                # .ask("add a reprompt if you want to keep the session open for the user to respond")
-                .response
+            .speak(speak_output)
+            .set_should_end_session(True)
+            .add_directive(PlayDirective(play_behavior=PlayBehavior.REPLACE_ALL,
+                                         audio_item=AudioItem(stream=Stream(url='https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'))))
+            .response
         )
 
 
@@ -57,9 +60,9 @@ class HelpIntentHandler(AbstractRequestHandler):
 
         return (
             handler_input.response_builder
-                .speak(speak_output)
-                .ask(speak_output)
-                .response
+            .speak(speak_output)
+            .ask(speak_output)
+            .response
         )
 
 
@@ -74,8 +77,8 @@ class CancelOrStopIntentHandler(AbstractRequestHandler):
 
         return (
             handler_input.response_builder
-                .speak(speak_output)
-                .response
+            .speak(speak_output)
+            .response
         )
 
 
@@ -89,6 +92,7 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
         # Any cleanup logic goes here.
 
         return handler_input.response_builder.response
+
 
 class IntentReflectorHandler(AbstractRequestHandler):
     """The intent reflector is used for interaction model testing and debugging.
@@ -105,9 +109,9 @@ class IntentReflectorHandler(AbstractRequestHandler):
 
         return (
             handler_input.response_builder
-                .speak(speak_output)
-                # .ask("add a reprompt if you want to keep the session open for the user to respond")
-                .response
+            .speak(speak_output)
+            # .ask("add a reprompt if you want to keep the session open for the user to respond")
+            .response
         )
 
 
@@ -126,9 +130,9 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 
         return (
             handler_input.response_builder
-                .speak(speak_output)
-                .ask(speak_output)
-                .response
+            .speak(speak_output)
+            .ask(speak_output)
+            .response
         )
 
 # The SkillBuilder object acts as the entry point for your skill, routing all request and response
