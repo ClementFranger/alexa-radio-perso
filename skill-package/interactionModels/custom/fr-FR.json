@@ -46,7 +46,18 @@
                     "samples": []
                 }
             ],
-            "types": []
+            "types": [
+                {
+                    "name": "Music",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "nightcore mix"
+                            }
+                        }
+                    ]
+                }
+            ]
         }
     }
 }
