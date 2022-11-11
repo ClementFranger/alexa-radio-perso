@@ -30,24 +30,22 @@ class LaunchRequestHandler(AbstractRequestHandler):
         )
 
 
-class GetMusicIntentHandler(AbstractRequestHandler):
-    """Handler for GetMusic Intent."""
+class PlayMusicIntent(AbstractRequestHandler):
+    """Handler for PlayMusicIntent Intent."""
     def can_handle(self, handler_input):
-        return ask_utils.is_intent_name("GetMusicIntent")(handler_input)
+        return ask_utils.is_intent_name("PlayMusicIntent")(handler_input)
 
     def handle(self, handler_input):
-        music = handler_input.request_envelope.request.intent.slots.get('music').value
-        logger.info(f'Got {music} music request')
-        speak_output = f"Voici {music}"
 
-        return (
-            handler_input.response_builder
-            .speak(speak_output)
-            .set_should_end_session(True)
-            .add_directive(PlayDirective(play_behavior=PlayBehavior.REPLACE_ALL,
-                                         audio_item=AudioItem(stream=Stream(url='https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'))))
-            .response
-        )
+        (handler_input.response_builder
+         .add_directive(PlayDirective(play_behavior=PlayBehavior.REPLACE_ALL,
+                                      audio_item=AudioItem(stream=Stream(
+                                          url='https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+                                          token='https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'))))
+
+         .set_should_end_session(True))
+
+        return handler_input.response_builder.response
 
 
 class HelpIntentHandler(AbstractRequestHandler):
@@ -70,10 +68,11 @@ class CancelOrStopIntentHandler(AbstractRequestHandler):
     """Single handler for Cancel and Stop Intent."""
     def can_handle(self, handler_input):
         return (ask_utils.is_intent_name("AMAZON.CancelIntent")(handler_input) or
-                ask_utils.is_intent_name("AMAZON.StopIntent")(handler_input))
+                ask_utils.is_intent_name("AMAZON.StopIntent")(handler_input) or
+                ask_utils.is_intent_name("AMAZON.PauseIntent")(handler_input))
 
     def handle(self, handler_input):
-        speak_output = "Goodbye!"
+        speak_output = "A bientôt!"
 
         return (
             handler_input.response_builder
@@ -142,7 +141,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 sb = SkillBuilder()
 
 sb.add_request_handler(LaunchRequestHandler())
-sb.add_request_handler(GetMusicIntentHandler())
+sb.add_request_handler(PlayMusicIntent())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())

@@ -4,19 +4,15 @@
             "invocationName": "radio perso",
             "intents": [
                 {
-                    "name": "GetMusicIntent",
-                    "slots": [
-                        {
-                            "name": "music",
-                            "type": "Music"
-                        }
-                    ],
+                    "name": "PlayMusicIntent",
+                    "slots": [],
                     "samples": [
-                        "cherche {music}",
-                        "de chercher {music}",
-                        "de jouer {music}",
-                        "joue {music}",
-                        "de mettre {music}"
+                        "joue une musique",
+                        "joue de la musique",
+                        "de jouer une musique",
+                        "de jouer de la musique",
+                        "met de la musique",
+                        "met une musique"
                     ]
                 },
                 {
