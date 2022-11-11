@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK for Python.
-# Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
-# session persistence, api calls, and more.
-# This sample is built using the handler classes approach in skill builder.
 import logging
 
 from ask_sdk_core.skill_builder import SkillBuilder
@@ -17,16 +11,15 @@ from ask_sdk_model import Response
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+
 class LaunchRequestHandler(AbstractRequestHandler):
     """Handler for Skill Launch."""
     def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
         
         return ask_utils.is_request_type("LaunchRequest")(handler_input)
 
     def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        speak_output = "Welcome, you can say Hello or Help. Which would you like to try?"
+        speak_output = "Bienvenue dans ta radio perso, quel musique veut-tu écouter ?"
 
         return (
             handler_input.response_builder
@@ -36,14 +29,14 @@ class LaunchRequestHandler(AbstractRequestHandler):
         )
 
 
-class HelloWorldIntentHandler(AbstractRequestHandler):
-    """Handler for Hello World Intent."""
+class GetMusicIntentHandler(AbstractRequestHandler):
+    """Handler for GetMusic Intent."""
     def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return ask_utils.is_intent_name("HelloWorldIntent")(handler_input)
+        return ask_utils.is_intent_name("GetMusicIntent")(handler_input)
 
     def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
+        music = handler_input.request_envelope.request.intent.slots.music.value
+        logger.info(f'Got {music} music')
         speak_output = "Hello Python World from Classes!"
 
         return (
@@ -57,11 +50,9 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
 class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
     def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
         return ask_utils.is_intent_name("AMAZON.HelpIntent")(handler_input)
 
     def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
         speak_output = "You can say hello to me! How can I help?"
 
         return (
@@ -75,12 +66,10 @@ class HelpIntentHandler(AbstractRequestHandler):
 class CancelOrStopIntentHandler(AbstractRequestHandler):
     """Single handler for Cancel and Stop Intent."""
     def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
         return (ask_utils.is_intent_name("AMAZON.CancelIntent")(handler_input) or
                 ask_utils.is_intent_name("AMAZON.StopIntent")(handler_input))
 
     def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
         speak_output = "Goodbye!"
 
         return (
@@ -93,11 +82,9 @@ class CancelOrStopIntentHandler(AbstractRequestHandler):
 class SessionEndedRequestHandler(AbstractRequestHandler):
     """Handler for Session End."""
     def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
         return ask_utils.is_request_type("SessionEndedRequest")(handler_input)
 
     def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
 
         # Any cleanup logic goes here.
 
@@ -110,11 +97,9 @@ class IntentReflectorHandler(AbstractRequestHandler):
     handler chain below.
     """
     def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
         return ask_utils.is_request_type("IntentRequest")(handler_input)
 
     def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
         intent_name = ask_utils.get_intent_name(handler_input)
         speak_output = "You just triggered " + intent_name + "."
 
@@ -132,11 +117,9 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
     the intent being invoked or included it in the skill builder below.
     """
     def can_handle(self, handler_input, exception):
-        # type: (HandlerInput, Exception) -> bool
         return True
 
     def handle(self, handler_input, exception):
-        # type: (HandlerInput, Exception) -> Response
         logger.error(exception, exc_info=True)
 
         speak_output = "Sorry, I had trouble doing what you asked. Please try again."
@@ -155,7 +138,6 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 sb = SkillBuilder()
 
 sb.add_request_handler(LaunchRequestHandler())
-sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())

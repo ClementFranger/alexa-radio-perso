@@ -1,0 +1,53 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "radio perso",
+            "intents": [
+                {
+                    "name": "GetMusicIntent",
+                    "slots": [
+                        {
+                            "name": "music",
+                            "type": "Music"
+                        }
+                    ],
+                    "samples": [
+                        "cherche {music}",
+                        "de chercher {music}",
+                        "de jouer {music}",
+                        "joue {music}",
+                        "de mettre {music}"
+                    ]
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.PauseIntent",
+                    "slots": [],
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.ResumeIntent",
+                    "slots": [],
+                    "samples": []
+                }
+            ],
+            "types": []
+        }
+    }
+}
+  

@@ -13,8 +13,8 @@
       },
       "skillInfrastructure": {
         "userConfig": {
-          "runtime": "python3.6",
-          "handler": "hello_world.handler",
+          "runtime": "python3.8",
+          "handler": "radio_perso.handler",
           "awsRegion": "eu-west-3"
         },
         "type": "@ask-cli/lambda-deployer"
