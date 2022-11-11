@@ -23,6 +23,7 @@ cdk.out/
 
 # Pycharm
 .idea
+.github
 
 # Alexa
 .ask
